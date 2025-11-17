@@ -123,52 +123,123 @@
       box-shadow: 0 0 5px rgba(0, 204, 255, 0.5);
     }
 
-    /* Metamorphing particles with shape-shifting and color transitions */
+    /* Metamorphing particles with multi-shape morphing and size scaling */
     .particle.metamorph {
-      animation: metamorphShape 3s ease-in-out infinite, metamorphColor 6s ease-in-out infinite;
+      animation: metamorphShape 4s ease-in-out infinite, metamorphColor 8s ease-in-out infinite, metamorphSize 3s ease-in-out infinite;
     }
 
     @keyframes metamorphShape {
-      0%, 100% {
+      0% {
         border-radius: 50%;
-        box-shadow: 0 0 6px currentColor;
-        width: 2px;
-        height: 2px;
-        filter: brightness(0.8);
+        box-shadow: 0 0 8px currentColor;
       }
-      25% {
+      16.67% {
         border-radius: 0%;
-        width: 2.5px;
-        height: 2.5px;
-        filter: brightness(1.1);
+      }
+      33.33% {
+        border-radius: 50%;
       }
       50% {
+        border-radius: 0%;
+      }
+      66.67% {
         border-radius: 30%;
-        box-shadow: 0 0 12px currentColor;
-        width: 3px;
+      }
+      83.33% {
+        border-radius: 70%;
+      }
+      100% {
+        border-radius: 50%;
+      }
+    }
+
+    @keyframes metamorphSize {
+      0%, 100% {
+        width: 1px;
+        height: 1px;
+        filter: brightness(0.7);
+      }
+      25% {
+        width: 2px;
         height: 2px;
+        filter: brightness(0.9);
+      }
+      50% {
+        width: 4px;
+        height: 4px;
         filter: brightness(1.3);
       }
       75% {
-        border-radius: 70%;
-        width: 2px;
-        height: 3px;
-        filter: brightness(1);
+        width: 3px;
+        height: 2px;
+        filter: brightness(1.1);
       }
     }
 
     @keyframes metamorphColor {
       0%, 100% { 
         background: #00ff88;
-        box-shadow: 0 0 8px rgba(0, 255, 136, 0.8);
+        box-shadow: 0 0 8px rgba(0, 255, 136, 0.9);
+      }
+      25% { 
+        background: #ff0055;
+        box-shadow: 0 0 10px rgba(255, 0, 85, 0.9);
+      }
+      50% { 
+        background: #00ccff;
+        box-shadow: 0 0 10px rgba(0, 204, 255, 0.9);
+      }
+      75% { 
+        background: #ffff00;
+        box-shadow: 0 0 8px rgba(255, 255, 0, 0.8);
+      }
+    }
+
+    /* Multi-shape morphing particles (stars, diamonds, complex shapes) */
+    .particle.shape-morph {
+      animation: shapeShift 5s ease-in-out infinite, sizeShift 4s ease-in-out infinite, colorShift 6s ease-in-out infinite;
+    }
+
+    @keyframes shapeShift {
+      0%, 100% {
+        clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+      }
+      25% {
+        clip-path: polygon(50% 50%, 100% 0%, 100% 100%, 0% 100%, 0% 0%);
+      }
+      50% {
+        clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+      }
+      75% {
+        clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+      }
+    }
+
+    @keyframes sizeShift {
+      0%, 100% {
+        width: 2px;
+        height: 2px;
+        filter: brightness(0.8);
+      }
+      50% {
+        width: 5px;
+        height: 5px;
+        filter: brightness(1.4);
+      }
+    }
+
+    @keyframes colorShift {
+      0%, 100% { 
+        background: #00ff88;
+        box-shadow: 0 0 10px rgba(0, 255, 136, 1);
       }
       33% { 
-        background: #ff0055;
-        box-shadow: 0 0 8px rgba(255, 0, 85, 0.8);
+        background: #ff1493;
+        box-shadow: 0 0 12px rgba(255, 20, 147, 1);
       }
       66% { 
-        background: #00ccff;
-        box-shadow: 0 0 8px rgba(0, 204, 255, 0.8);
+        background: #00bfff;
+        box-shadow: 0 0 12px rgba(0, 191, 255, 1);
       }
     }
 
@@ -249,24 +320,47 @@
       display: inline-block;
       width: 100px;
       height: 100px;
-      border: 2px solid #00ff88;
-      background: rgba(0, 255, 136, 0.05);
-      color: #00ff88;
       text-decoration: none;
       font-family: 'Space Mono', monospace;
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
       position: relative;
-      overflow: hidden;
+      perspective: 1200px;
+      text-align: center;
+      transform-style: preserve-3d;
+    }
+
+    /* 3D Cube structure */
+    .btn-cube {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.3s ease;
+    }
+
+    .btn-face {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border: 2px solid #00ff88;
+      background: rgba(0, 255, 136, 0.1);
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.3s ease;
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2), inset 0 0 20px rgba(0, 255, 136, 0.05);
-      perspective: 1000px;
-      text-align: center;
+      color: #00ff88;
+      font-weight: 700;
+      box-shadow: inset 0 0 20px rgba(0, 255, 136, 0.2);
     }
+
+    /* Cube face positions */
+    .btn-face.front { transform: translateZ(50px); }
+    .btn-face.back { transform: rotateY(180deg) translateZ(50px); }
+    .btn-face.right { transform: rotateY(90deg) translateZ(50px); }
+    .btn-face.left { transform: rotateY(-90deg) translateZ(50px); }
+    .btn-face.top { transform: rotateX(90deg) translateZ(50px); }
+    .btn-face.bottom { transform: rotateX(-90deg) translateZ(50px); }
 
     .btn::before {
       content: '';
@@ -284,7 +378,7 @@
 
     .btn span {
       position: relative;
-      z-index: 1;
+      z-index: 10;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -311,13 +405,13 @@
         transform: translateY(-8px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateZ(50px);
       }
       25% {
-        transform: translateY(-12px) rotateX(45deg) rotateY(30deg) rotateZ(15deg) translateZ(60px);
+        transform: translateY(-12px) rotateX(90deg) rotateY(0deg) rotateZ(0deg) translateZ(50px);
       }
       50% {
-        transform: translateY(-8px) rotateX(90deg) rotateY(60deg) rotateZ(45deg) translateZ(50px);
+        transform: translateY(-8px) rotateX(180deg) rotateY(90deg) rotateZ(0deg) translateZ(50px);
       }
       75% {
-        transform: translateY(-12px) rotateX(45deg) rotateY(30deg) rotateZ(15deg) translateZ(60px);
+        transform: translateY(-12px) rotateX(270deg) rotateY(180deg) rotateZ(90deg) translateZ(50px);
       }
       100% {
         transform: translateY(-8px) rotateX(360deg) rotateY(360deg) rotateZ(360deg) translateZ(50px);
@@ -350,13 +444,13 @@
         transform: translateY(-8px) rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateZ(50px);
       }
       25% {
-        transform: translateY(-12px) rotateX(-45deg) rotateY(-30deg) rotateZ(-15deg) translateZ(60px);
+        transform: translateY(-12px) rotateX(-90deg) rotateY(0deg) rotateZ(0deg) translateZ(50px);
       }
       50% {
-        transform: translateY(-8px) rotateX(-90deg) rotateY(-60deg) rotateZ(-45deg) translateZ(50px);
+        transform: translateY(-8px) rotateX(-180deg) rotateY(-90deg) rotateZ(0deg) translateZ(50px);
       }
       75% {
-        transform: translateY(-12px) rotateX(-45deg) rotateY(-30deg) rotateZ(-15deg) translateZ(60px);
+        transform: translateY(-12px) rotateX(-270deg) rotateY(-180deg) rotateZ(-90deg) translateZ(50px);
       }
       100% {
         transform: translateY(-8px) rotateX(-360deg) rotateY(-360deg) rotateZ(-360deg) translateZ(50px);
@@ -453,19 +547,60 @@
       <p>CLOUD NATIVE</p>
       
       <div class="buttons">
-        <a class="btn" href="/health/liveliness"><span>✓<br>LIVE</span></a>
-        <a class="btn" href="/health/readiness"><span>✓<br>READY</span></a>
-        <a class="btn danger" href="/liveliness/400"><span>✕<br>FAIL</span></a>
-        <a class="btn danger" href="/readiness/400"><span>✕<br>SKIP</span></a>
+        <a class="btn" href="/health/liveliness">
+          <div class="btn-cube">
+            <div class="btn-face front">✓</div>
+            <div class="btn-face back">✓</div>
+            <div class="btn-face right">L</div>
+            <div class="btn-face left">I</div>
+            <div class="btn-face top">V</div>
+            <div class="btn-face bottom">E</div>
+          </div>
+          <span>✓<br>LIVE</span>
+        </a>
+        <a class="btn" href="/health/readiness">
+          <div class="btn-cube">
+            <div class="btn-face front">✓</div>
+            <div class="btn-face back">✓</div>
+            <div class="btn-face right">R</div>
+            <div class="btn-face left">D</div>
+            <div class="btn-face top">Y</div>
+            <div class="btn-face bottom">R</div>
+          </div>
+          <span>✓<br>READY</span>
+        </a>
+        <a class="btn danger" href="/liveliness/400">
+          <div class="btn-cube">
+            <div class="btn-face front">✕</div>
+            <div class="btn-face back">✕</div>
+            <div class="btn-face right">F</div>
+            <div class="btn-face left">A</div>
+            <div class="btn-face top">I</div>
+            <div class="btn-face bottom">L</div>
+          </div>
+          <span>✕<br>FAIL</span>
+        </a>
+        <a class="btn danger" href="/readiness/400">
+          <div class="btn-cube">
+            <div class="btn-face front">✕</div>
+            <div class="btn-face back">✕</div>
+            <div class="btn-face right">S</div>
+            <div class="btn-face left">P</div>
+            <div class="btn-face top">I</div>
+            <div class="btn-face bottom">K</div>
+          </div>
+          <span>✕<br>SKIP</span>
+        </a>
       </div>
     </div>
   </div>
 
   <script>
-    // Enhanced particle system with 150+ cyberpunk particles + metamorphing particles
+    // Enhanced particle system with 150+ cyberpunk particles + metamorphing particles + shape-morphing
     const particlesContainer = document.getElementById('particles-container');
-    const particleCount = 150;
-    const metamorphCount = 50; // Additional metamorphing particles
+    const particleCount = 120;
+    const metamorphCount = 40; // Metamorphing particles (color + size morphing)
+    const shapeMorphCount = 40; // Shape-morphing particles (geometric shapes)
     
     const trajectoryTypes = [
       { name: 'spiral', factor: 1 },
@@ -601,7 +736,66 @@
       particlesContainer.appendChild(particle);
     }
 
-    // Add CSS animations
+    // Shape-morphing particles (stars, diamonds, various geometric forms)
+    for (let i = 0; i < shapeMorphCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle shape-morph';
+      
+      const startX = Math.random() * window.innerWidth;
+      const startY = Math.random() * window.innerHeight;
+      
+      const trajectory = trajectoryTypes[Math.floor(Math.random() * trajectoryTypes.length)];
+      const speed = 2 + Math.random() * 10;
+      const angle = Math.random() * Math.PI * 2;
+      
+      let tx, ty, tz;
+      
+      switch(trajectory.name) {
+        case 'spiral':
+          tx = Math.cos(angle) * speed * (70 + i);
+          ty = Math.sin(angle) * speed * (70 + i);
+          tz = (Math.random() - 0.5) * 320;
+          break;
+        case 'wave':
+          tx = Math.cos(angle) * speed * 160;
+          ty = Math.sin(angle * 2.8) * speed * 130;
+          tz = Math.sin(angle * 1.8) * 260;
+          break;
+        case 'circular':
+          tx = Math.cos(angle) * speed * 220;
+          ty = Math.sin(angle) * speed * 220;
+          tz = Math.cos(angle) * 290;
+          break;
+        case 'orbital':
+          tx = Math.cos(angle) * speed * 240;
+          ty = Math.sin(angle * 0.6) * speed * 150;
+          tz = Math.sin(angle * 3) * 310;
+          break;
+        case 'zigzag':
+          tx = (Math.random() - 0.5) * speed * 300;
+          ty = (i % 4) ? speed * 170 : -speed * 170;
+          tz = Math.sin(angle) * 280;
+          break;
+        case 'diagonal':
+          tx = Math.cos(angle) * speed * 270;
+          ty = Math.sin(angle) * speed * 270;
+          tz = Math.cos(angle * 3.5) * 320;
+          break;
+      }
+      
+      particle.style.left = startX + 'px';
+      particle.style.top = startY + 'px';
+      particle.style.setProperty('--tx', tx + 'px');
+      particle.style.setProperty('--ty', ty + 'px');
+      particle.style.setProperty('--tz', tz + 'px');
+      
+      const duration = 10 + Math.random() * 25;
+      const delay = Math.random() * 12;
+      
+      particle.style.setProperty('--duration', duration + 's');
+      
+      particlesContainer.appendChild(particle);
+    }
     const style = document.createElement('style');
     style.textContent = `
       @keyframes particleFloat {
