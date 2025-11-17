@@ -20,6 +20,13 @@
       background-attachment: fixed;
       position: relative;
       overflow-x: hidden;
+      background-size: 400% 400%;
+      animation: bgShift 15s ease infinite;
+    }
+
+    @keyframes bgShift {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
     }
     
     body::before {
@@ -66,6 +73,8 @@
       position: relative;
       z-index: 100;
       animation: fadeInDown 0.8s ease-out;
+      background: linear-gradient(90deg, rgba(10, 0, 20, 0.95), rgba(26, 0, 51, 0.95), rgba(10, 0, 20, 0.95));
+      backdrop-filter: blur(10px);
     }
     
     .navbar-brand {
@@ -75,6 +84,12 @@
       text-shadow: 0 0 10px rgba(0, 255, 136, 0.8), 0 0 20px rgba(0, 255, 136, 0.4);
       font-family: 'Orbitron', sans-serif;
       letter-spacing: 2px;
+      animation: brandGlow 2s ease-in-out infinite;
+    }
+
+    @keyframes brandGlow {
+      0%, 100% { text-shadow: 0 0 10px rgba(0, 255, 136, 0.8), 0 0 20px rgba(0, 255, 136, 0.4); }
+      50% { text-shadow: 0 0 20px rgba(0, 255, 136, 1), 0 0 40px rgba(0, 255, 136, 0.6), 0 0 60px rgba(255, 0, 200, 0.3); }
     }
     
     .nav a { 
@@ -350,6 +365,9 @@
       padding: 40px !important;
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(5px);
+      animation: slideInUp 1s ease-out;
+      border-image: linear-gradient(135deg, #00ff88, #00cc6f, #00ff88) 1;
     }
     
     .jumbotron::before {
@@ -361,6 +379,25 @@
       height: 200%;
       background: radial-gradient(circle, rgba(0, 255, 136, 0.03) 0%, transparent 70%);
       animation: glow-shift 15s ease-in-out infinite;
+    }
+
+    .jumbotron::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(45deg, transparent 30%, rgba(0, 255, 136, 0.05) 50%, transparent 70%);
+      animation: shimmer 3s infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
     }
     
     @keyframes glow-shift {
@@ -378,6 +415,18 @@
       letter-spacing: 3px;
       position: relative;
       z-index: 1;
+      animation: titlePulse 2s ease-in-out infinite;
+    }
+
+    @keyframes titlePulse {
+      0%, 100% { 
+        text-shadow: 0 0 30px rgba(0, 255, 136, 0.8), 0 0 60px rgba(0, 255, 136, 0.4);
+        transform: scale(1);
+      }
+      50% {
+        text-shadow: 0 0 50px rgba(0, 255, 136, 1), 0 0 80px rgba(255, 0, 200, 0.5);
+        transform: scale(1.02);
+      }
     }
     
     .jumbotron h2 {
@@ -390,6 +439,12 @@
       text-transform: uppercase;
       position: relative;
       z-index: 1;
+      animation: subtitleFade 3s ease-in-out infinite;
+    }
+
+    @keyframes subtitleFade {
+      0%, 100% { opacity: 0.8; }
+      50% { opacity: 1; }
     }
     
     .logo-container {
@@ -416,6 +471,25 @@
       box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
       animation: float 3s ease-in-out infinite;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(0, 255, 136, 0.2), transparent);
+      opacity: 0;
+      animation: logoPulse 2s ease-in-out infinite;
+    }
+    
+    @keyframes logoPulse {
+      0%, 100% { opacity: 0; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
     }
     
     .logo-item:nth-child(1) { animation-delay: 0s; }
@@ -423,14 +497,24 @@
     .logo-item:nth-child(3) { animation-delay: 1s; }
     
     .logo-item:hover {
-      box-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
-      transform: scale(1.1);
+      box-shadow: 0 0 40px rgba(0, 255, 136, 0.5), inset 0 0 20px rgba(0, 255, 136, 0.2);
+      transform: scale(1.15) rotateY(10deg);
+      border-color: #ff00ff;
+      background: rgba(0, 255, 136, 0.15);
     }
     
     .logo-item img {
       max-width: 80%;
       max-height: 80%;
       object-fit: contain;
+      position: relative;
+      z-index: 1;
+      filter: drop-shadow(0 0 10px rgba(0, 255, 136, 0.4));
+      transition: filter 0.3s ease;
+    }
+
+    .logo-item:hover img {
+      filter: drop-shadow(0 0 20px rgba(255, 0, 200, 0.8));
     }
     
     svg {
@@ -453,6 +537,12 @@
       text-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
       margin-bottom: 25px;
       text-transform: uppercase;
+      animation: sectionTitleGlow 2.5s ease-in-out infinite;
+    }
+
+    @keyframes sectionTitleGlow {
+      0%, 100% { text-shadow: 0 0 15px rgba(0, 255, 136, 0.6); }
+      50% { text-shadow: 0 0 30px rgba(0, 255, 136, 1), 0 0 50px rgba(255, 0, 200, 0.4); }
     }
 
     .buttons-grid {
@@ -479,6 +569,7 @@
       box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
       position: relative;
       overflow: hidden;
+      clip-path: polygon(0 0, 100% 0, 95% 100%, 0 100%);
     }
 
     .probe-btn::before {
@@ -488,17 +579,32 @@
       left: -100%;
       width: 100%;
       height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.4), transparent);
       transition: left 0.5s ease;
-      z-index: -1;
+      z-index: 1;
+    }
+
+    .probe-btn::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 30% 30%, rgba(0, 255, 136, 0.1), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 0;
+    }
+
+    .probe-btn:hover::after {
+      opacity: 1;
     }
 
     .probe-btn:hover {
       color: #0a0014;
       background: rgba(0, 255, 136, 0.3);
-      box-shadow: 0 0 30px rgba(0, 255, 136, 0.6), inset 0 0 20px rgba(0, 255, 136, 0.2);
-      transform: translateY(-3px);
-      text-shadow: none;
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.8), inset 0 0 20px rgba(0, 255, 136, 0.3), 0 0 50px rgba(0, 255, 136, 0.2);
+      transform: translateY(-5px) skewX(-2deg);
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      border-color: #ff00ff;
     }
 
     .probe-btn:hover::before {
@@ -512,13 +618,14 @@
     }
 
     .probe-btn.danger::before {
-      background: linear-gradient(90deg, transparent, rgba(255, 0, 85, 0.3), transparent);
+      background: linear-gradient(90deg, transparent, rgba(255, 0, 85, 0.4), transparent);
     }
 
     .probe-btn.danger:hover {
       color: #0a0014;
       background: rgba(255, 0, 85, 0.3);
-      box-shadow: 0 0 30px rgba(255, 0, 85, 0.6), inset 0 0 20px rgba(255, 0, 85, 0.2);
+      box-shadow: 0 0 30px rgba(255, 0, 85, 0.8), inset 0 0 20px rgba(255, 0, 85, 0.3);
+      border-color: #00ff88;
     }
 
     .probe-btn.success {
@@ -531,8 +638,8 @@
     }
 
     .probe-btn:active {
-      transform: translateY(0);
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.8), inset 0 0 10px rgba(0, 255, 136, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(0, 255, 136, 1), inset 0 0 15px rgba(0, 255, 136, 0.6);
     }
   </style>
   </head>
