@@ -1,7 +1,3 @@
-The value of "metadata: -> name" change it to {{ .Chart.Name }}-route
-The value of "spec: -> to: -> name" change it to {{ .Chart.Name }}-service
-The value of "spec: -> port: -> targetPort" change it to {{ .Values.service.servicePort }}
-
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
