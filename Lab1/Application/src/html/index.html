@@ -3,25 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Helm Chart Application</title>
+  <title>Cloud Native - HELM • ArgoCD</title>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
     
     body {
-      background: linear-gradient(135deg, #0a0014 0%, #1a0033 25%, #0d0021 50%, #1a0033 75%, #0a0014 100%);
+      background: #0a0014;
       min-height: 100vh;
       color: #00ff88;
-      font-family: 'Share Tech Mono', monospace;
-      background-attachment: fixed;
+      font-family: 'Space Mono', monospace;
       position: relative;
-      overflow-x: hidden;
+      overflow: hidden;
     }
-    
+
+    /* Animated grid background */
     body::before {
       content: '';
       position: fixed;
@@ -29,596 +28,337 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: 
-        repeating-linear-gradient(
-          0deg,
-          rgba(0, 255, 136, 0.02) 0px,
-          rgba(0, 255, 136, 0.02) 2px,
-          transparent 2px,
-          transparent 4px
-        );
+      background: repeating-linear-gradient(
+        0deg,
+        transparent 0px,
+        transparent 49px,
+        rgba(0, 255, 136, 0.03) 49px,
+        rgba(0, 255, 136, 0.03) 50px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0px,
+        transparent 49px,
+        rgba(0, 255, 136, 0.03) 49px,
+        rgba(0, 255, 136, 0.03) 50px
+      );
       pointer-events: none;
       z-index: 1;
-      animation: scanlines 8s linear infinite;
+      animation: gridShift 20s linear infinite;
     }
     
-    @keyframes scanlines {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(10px); }
+    @keyframes gridShift {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 50px 50px, 50px 50px; }
     }
-    
-    body::after {
-      content: '';
+
+    /* Floating orbs background */
+    .orb {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+      border-radius: 50%;
       pointer-events: none;
       z-index: 2;
     }
-    
-    .navbar {
-      background: rgba(10, 0, 20, 0.98) !important;
-      border-bottom: 3px solid #00ff88;
-      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(0, 255, 136, 0.1);
-      position: relative;
-      z-index: 100;
-      animation: fadeInDown 0.8s ease-out;
+
+    .orb-1 {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(0, 255, 136, 0.1) 0%, transparent 70%);
+      top: -100px;
+      left: -100px;
+      animation: orbFloat 15s ease-in-out infinite;
     }
-    
-    .navbar-brand {
-      font-weight: 900;
-      font-size: 16px;
-      color: #00ff88 !important;
-      text-shadow: 0 0 10px rgba(0, 255, 136, 0.8), 0 0 20px rgba(0, 255, 136, 0.4);
-      font-family: 'Orbitron', sans-serif;
-      letter-spacing: 2px;
+
+    .orb-2 {
+      width: 250px;
+      height: 250px;
+      background: radial-gradient(circle, rgba(255, 0, 127, 0.08) 0%, transparent 70%);
+      bottom: -50px;
+      right: -50px;
+      animation: orbFloat 18s ease-in-out infinite reverse;
     }
-    
-    .nav a { 
-      color: #00cc6f !important; 
-      transition: all 0.3s ease;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 12px;
-      letter-spacing: 1px;
+
+    .orb-3 {
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(0, 200, 255, 0.06) 0%, transparent 70%);
+      top: 50%;
+      right: -100px;
+      animation: orbFloat 20s ease-in-out infinite;
     }
-    
-    .nav a:hover { 
-      color: #00ff88 !important; 
-      text-shadow: 0 0 15px rgba(0, 255, 136, 0.8), 0 0 25px rgba(255, 0, 127, 0.3);
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      25% { transform: translate(-40px, -40px) scale(1.1); }
+      50% { transform: translate(20px, 40px) scale(0.95); }
+      75% { transform: translate(-20px, -60px) scale(1.05); }
     }
-    
-    .nav li {
-      animation: slideFromLeft 0.6s ease-out backwards;
+
+    /* Particle system */
+    .particle {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 2;
     }
-    
-    .nav li:nth-child(1) { animation-delay: 0.1s; }
-    .nav li:nth-child(2) { animation-delay: 0.2s; }
-    .nav li:nth-child(3) { animation-delay: 0.3s; }
-    
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+
+    .particle.type-1 {
+      width: 2px;
+      height: 2px;
+      background: #00ff88;
+      box-shadow: 0 0 6px rgba(0, 255, 136, 0.6);
     }
-    
-    @keyframes slideFromLeft {
-      from {
-        opacity: 0;
-        transform: translateX(-50px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
+
+    .particle.type-2 {
+      width: 1px;
+      height: 1px;
+      background: #ff0055;
+      box-shadow: 0 0 4px rgba(255, 0, 85, 0.5);
     }
-    
-    @keyframes slideInUp {
-      from {
-        opacity: 0;
-        transform: translateY(40px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+
+    .particle.type-3 {
+      width: 1.5px;
+      height: 1.5px;
+      background: #00ccff;
+      box-shadow: 0 0 5px rgba(0, 204, 255, 0.5);
     }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-20px); }
-    }
-    
-    .content-wrapper {
-      margin: 100px auto;
+
+    /* Main container */
+    .container-main {
       position: relative;
       z-index: 3;
-      animation: slideInUp 1s ease-out;
-    }
-    
-    .jumbotron {
-      background: rgba(20, 0, 40, 0.6);
-      border: 2px solid #00ff88;
-      border-radius: 2px;
-      box-shadow: 0 0 30px rgba(0, 255, 136, 0.2), inset 0 0 20px rgba(0, 255, 136, 0.05);
-      padding: 40px !important;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .jumbotron::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(0, 255, 136, 0.03) 0%, transparent 70%);
-      animation: glow-shift 15s ease-in-out infinite;
-    }
-    
-    @keyframes glow-shift {
-      0%, 100% { transform: translate(0, 0); }
-      50% { transform: translate(-20px, -20px); }
-    }
-    
-    .jumbotron h1 {
-      color: #00ff88;
-      font-weight: 900;
-      text-shadow: 0 0 30px rgba(0, 255, 136, 0.8), 0 0 60px rgba(0, 255, 136, 0.4);
-      margin-top: 20px;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 3rem;
-      letter-spacing: 3px;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .jumbotron h2 {
-      color: #00ff88;
-      font-weight: 400;
-      font-size: 14px;
-      margin-top: 15px;
-      font-family: 'Share Tech Mono', monospace;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      position: relative;
-      z-index: 1;
-    }
-    
-    .logo-container {
+      height: 100vh;
       display: flex;
-      justify-content: center;
-      gap: 30px;
-      margin: 30px 0;
-      flex-wrap: wrap;
       align-items: center;
-      position: relative;
-      z-index: 1;
+      justify-content: center;
+      perspective: 1200px;
     }
-    
-    .logo-item {
+
+    .content {
+      text-align: center;
+      position: relative;
+      animation: contentFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes contentFloat {
+      0%, 100% { transform: translate3d(0, 0, 0) rotateX(0deg); }
+      25% { transform: translate3d(0, -20px, 50px) rotateX(5deg); }
+      50% { transform: translate3d(0, -40px, 100px) rotateX(0deg); }
+      75% { transform: translate3d(0, -20px, 50px) rotateX(-5deg); }
+    }
+
+    h1 {
+      font-size: 72px;
+      font-weight: 700;
+      color: #00ff88;
+      margin: 0;
+      letter-spacing: 4px;
+      text-shadow: 0 0 30px rgba(0, 255, 136, 0.8), 0 0 60px rgba(0, 255, 136, 0.4);
+      animation: titleFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes titleFloat {
+      0%, 100% { transform: translateY(0) translateZ(0); }
+      50% { transform: translateY(-20px) translateZ(50px); }
+    }
+
+    p {
+      font-size: 18px;
+      color: #00cc6f;
+      margin: 20px 0;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      animation: subtitleFloat 3.5s ease-in-out infinite;
+    }
+
+    @keyframes subtitleFloat {
+      0%, 100% { opacity: 0.7; transform: translateY(0); }
+      50% { opacity: 1; transform: translateY(-10px); }
+    }
+
+    .buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 50px;
+      flex-wrap: wrap;
+      animation: buttonsSlideIn 0.8s ease-out;
+    }
+
+    @keyframes buttonsSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .btn {
+      display: inline-block;
       width: 100px;
       height: 100px;
-      padding: 10px;
       border: 2px solid #00ff88;
-      border-radius: 2px;
       background: rgba(0, 255, 136, 0.05);
+      color: #00ff88;
+      text-decoration: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
-      animation: float 3s ease-in-out infinite;
       transition: all 0.3s ease;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.2), inset 0 0 20px rgba(0, 255, 136, 0.05);
+      perspective: 1000px;
+      text-align: center;
     }
-    
-    .logo-item:nth-child(1) { animation-delay: 0s; }
-    .logo-item:nth-child(2) { animation-delay: 0.5s; }
-    .logo-item:nth-child(3) { animation-delay: 1s; }
-    
-    .logo-item:hover {
-      box-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
-      transform: scale(1.1);
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(0, 255, 136, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s ease, height 0.6s ease;
+      z-index: 0;
     }
-    
-    .logo-item img {
-      max-width: 80%;
-      max-height: 80%;
-      object-fit: contain;
-    }
-    
-    svg {
+
+    .btn span {
       position: relative;
       z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn:hover {
+      transform: translateY(-8px) rotateX(15deg) rotateZ(5deg);
+      background: rgba(0, 255, 136, 0.15);
+      box-shadow: 0 0 40px rgba(0, 255, 136, 0.8), inset 0 0 20px rgba(0, 255, 136, 0.3), 0 0 60px rgba(0, 255, 136, 0.2);
+      border-color: #ff00ff;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .btn:active {
+      transform: translateY(-4px);
+    }
+
+    .btn.danger {
+      border-color: #ff0055;
+      color: #ff0055;
+      box-shadow: 0 0 20px rgba(255, 0, 85, 0.2), inset 0 0 20px rgba(255, 0, 85, 0.05);
+    }
+
+    .btn.danger::before {
+      background: rgba(255, 0, 85, 0.3);
+    }
+
+    .btn.danger:hover {
+      box-shadow: 0 0 40px rgba(255, 0, 85, 0.8), inset 0 0 20px rgba(255, 0, 85, 0.3);
+      border-color: #00ff88;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 48px;
+      }
+      p {
+        font-size: 14px;
+      }
+      .btn {
+        width: 80px;
+        height: 80px;
+        font-size: 10px;
+      }
+      .buttons {
+        gap: 15px;
+      }
     }
   </style>
-  </head>
-  <body>
-    <nav class="navbar navbar-inverse navbar-static-top">
-      <div class="container">
-        <a class="navbar-brand" href="/">☸ Helm Chart Application</a>
-        <ul class="nav navbar-nav">
-          <li class="active">
-            <a href="/">Home</a>
-          </li>
-          <li>
-            <a href="/health/liveliness">Check Liveness</a>
-          </li>
-          <li>
-            <a href="/health/readiness">Check Readiness</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+</head>
+<body>
+  <!-- Floating background orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
 
-    <div class="content-wrapper">
-      <div class="jumbotron" style="padding:40px;">
-        <!-- Animated Tech SVG Background -->
-        <svg width="100%" height="200" viewBox="0 0 600 200" style="position: absolute; top: 0; left: 0; opacity: 0.1; z-index: 0;">
-          <defs>
-            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
-            </pattern>
-          </defs>
-          <rect width="600" height="200" fill="url(#grid)"/>
-          <g opacity="0.3">
-            <circle cx="100" cy="50" r="30" fill="none" stroke="#00ff88" stroke-width="2">
-              <animate attributeName="r" values="30;35;30" dur="3s" repeatCount="indefinite"/>
-            </circle>
-            <circle cx="500" cy="150" r="40" fill="none" stroke="#00ff88" stroke-width="2">
-              <animate attributeName="r" values="40;45;40" dur="4s" repeatCount="indefinite"/>
-            </circle>
-            <circle cx="300" cy="100" r="25" fill="none" stroke="#00ff88" stroke-width="2">
-              <animate attributeName="r" values="25;30;25" dur="2.5s" repeatCount="indefinite"/>
-            </circle>
-          </g>
-        </svg>
+  <!-- Particle system container -->
+  <div id="particles-container"></div>
 
-        <!-- Logo Container -->
-        <div class="logo-container">
-          <div class="logo-item">
-            <img src="https://developers.redhat.com/sites/default/files/styles/article_feature/public/blog/2018/05/openshift-featured.png?itok=g0Ee8H1H" alt="OpenShift">
-          </div>
-          <div class="logo-item">
-            <img src="https://redhat-scholars.github.io/argocd-tutorial/argocd-tutorial/_images/argocd-sync-flow.png" alt="ArgoCD">
-          </div>
-          <div class="logo-item">
-            <img src="https://raw.githubusercontent.com/rhilconsultants/Application-Deployment-Workshop/main/Class%20artifacts/helm-icon-color.png" alt="Helm">
-          </div>
-        </div>
-
-        <!-- Animated Title SVG -->
-        <svg width="100%" height="150" viewBox="0 0 600 150" style="margin: 20px 0;">
-          <defs>
-            <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stop-color="#00ff88">
-                <animate attributeName="stop-color" values="#00ff88;#00cc6f;#00ff88" dur="6s" repeatCount="indefinite"/>
-              </stop>
-              <stop offset="100%" stop-color="#00cc6f">
-                <animate attributeName="stop-color" values="#00cc6f;#00ff88;#00cc6f" dur="6s" repeatCount="indefinite"/>
-              </stop>
-            </linearGradient>
-            <filter id="glow">
-              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
-              <feMerge>
-                <feMergeNode in="coloredBlur"/>
-                <feMergeNode in="SourceGraphic"/>
-              </feMerge>
-            </filter>
-          </defs>
-          <text x="50%" y="50%" font-size="36" font-weight="bold" text-anchor="middle" fill="url(#titleGrad)" filter="url(#glow)" font-family="Orbitron">
-            HELLO WORLD
-          </text>
-        </svg>
-
-        <h1 style="text-align: center; margin: 20px 0;">Hello, world!</h1>
-        <h2 style="text-align: center;">Our New web site, Deployed with HELM and ArgoCD.</h2>
+  <!-- Main content -->
+  <div class="container-main">
+    <div class="content">
+      <h1>READY</h1>
+      <p>CLOUD NATIVE</p>
+      
+      <div class="buttons">
+        <a class="btn" href="/health/liveliness"><span>✓<br>LIVE</span></a>
+        <a class="btn" href="/health/readiness"><span>✓<br>READY</span></a>
+        <a class="btn danger" href="/liveliness/400"><span>✕<br>FAIL</span></a>
+        <a class="btn danger" href="/readiness/400"><span>✕<br>SKIP</span></a>
       </div>
     </div>
-  </body>
-</html>
-  id="hello-world-svg"
-  width="100%"
-  viewBox="0 0 600 300"
-  xmlns="http://www.w3.org/2000/svg"
-  role="img"
-  aria-labelledby="helloTitle helloDesc"
->
-  <title id="helloTitle">Animated High-Tech Hello World</title>
-  <desc id="helloDesc">Neon high-tech animated Hello World SVG with grid and scanline effects.</desc>
+  </div>
 
-  <defs>
-    <!-- Background gradient -->
-    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#050816" />
-      <stop offset="50%" stop-color="#05081c" />
-      <stop offset="100%" stop-color="#000000" />
-    </linearGradient>
+  <script>
+    // Particle system generator
+    const particlesContainer = document.getElementById('particles-container');
+    const particleCount = 25;
 
-    <!-- Neon stroke gradient with animated colors -->
-    <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#00f0ff">
-        <animate attributeName="stop-color"
-                 values="#00f0ff;#00ff95;#00f0ff"
-                 dur="6s"
-                 repeatCount="indefinite" />
-      </stop>
-      <stop offset="50%" stop-color="#00aaff">
-        <animate attributeName="stop-color"
-                 values="#00aaff;#00f0ff;#7f5dff;#00aaff"
-                 dur="6s"
-                 repeatCount="indefinite" />
-      </stop>
-      <stop offset="100%" stop-color="#7f5dff">
-        <animate attributeName="stop-color"
-                 values="#7f5dff;#00ff95;#7f5dff"
-                 dur="6s"
-                 repeatCount="indefinite" />
-      </stop>
-    </linearGradient>
-
-    <!-- Grid pattern -->
-    <pattern id="gridPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M 40 0 L 0 0 0 40"
-            fill="none"
-            stroke="rgba(0,255,255,0.09)"
-            stroke-width="1" />
-    </pattern>
-
-    <!-- Glow filter for neon text -->
-    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
-      <feGaussianBlur stdDeviation="4" result="blur" />
-      <feColorMatrix in="blur" type="matrix"
-                     values="0 0 0 0 0
-                             0 1 1 0 0
-                             0 1 1 0 0
-                             0 0 0 1 0" result="cyanGlow" />
-      <feMerge>
-        <feMergeNode in="cyanGlow" />
-        <feMergeNode in="SourceGraphic" />
-      </feMerge>
-    </filter>
-  </defs>
-
-  <style>
-    /* Scope everything to this SVG */
-    #hello-world-svg {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #050811;
+    for (let i = 0; i < particleCount; i++) {
+      const particle = document.createElement('div');
+      particle.className = `particle type-${Math.floor(Math.random() * 3) + 1}`;
+      
+      const startX = Math.random() * window.innerWidth;
+      const startY = Math.random() * window.innerHeight;
+      const tx = (Math.random() - 0.5) * 400;
+      const ty = (Math.random() - 0.5) * 400;
+      const tz = (Math.random() - 0.5) * 200;
+      
+      particle.style.left = startX + 'px';
+      particle.style.top = startY + 'px';
+      particle.style.setProperty('--tx', tx + 'px');
+      particle.style.setProperty('--ty', ty + 'px');
+      particle.style.setProperty('--tz', tz + 'px');
+      
+      const duration = 8 + Math.random() * 12;
+      const delay = Math.random() * 5;
+      
+      particle.style.animation = `particleFloat ${duration}s ease-in-out ${delay}s infinite`;
+      
+      particlesContainer.appendChild(particle);
     }
 
-    #hello-world-svg .hud-label {
-      fill: #4ad9ff;
-      font-size: 10px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      opacity: 0.75;
-    }
-
-    #hello-world-svg #grid {
-      animation: hw-floatGrid 10s linear infinite alternate;
-      opacity: 0.75;
-    }
-
-    #hello-world-svg #scanline {
-      mix-blend-mode: screen;
-      opacity: 0.45;
-      animation: hw-scan 3s linear infinite;
-    }
-
-    #hello-world-svg #hello-outline {
-      fill: none;
-      stroke: url(#neonGrad);
-      stroke-width: 2.2;
-      stroke-dasharray: 900;
-      stroke-dashoffset: 900;
-      filter: url(#glow);
-      animation:
-        hw-draw 3s ease-out forwards,
-        hw-glowPulse 2.2s ease-in-out 3s infinite;
-    }
-
-    #hello-world-svg #hello-fill {
-      fill: #e6f7ff;
-      opacity: 0;
-      animation: hw-fadeInFill 1.6s ease-out 1.8s forwards;
-    }
-
-    #hello-world-svg #subtitle {
-      fill: #7fd3ff;
-      font-size: 12px;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      opacity: 0;
-      animation: hw-fadeInUp 1s ease-out 2.4s forwards;
-    }
-
-    #hello-world-svg #cursor {
-      fill: #00f0ff;
-      animation: hw-blink 1s steps(1) infinite;
-    }
-
-    #hello-world-svg #orbits circle {
-      fill: none;
-      stroke: rgba(0,255,255,0.25);
-      stroke-width: 1;
-      stroke-dasharray: 4 8;
-      transform-origin: 300px 150px;
-      animation: hw-rotateOrbit 14s linear infinite;
-    }
-
-    #hello-world-svg #orbits circle:nth-child(2) {
-      stroke-opacity: 0.18;
-      animation-duration: 20s;
-    }
-
-    #hello-world-svg #orbits circle:nth-child(3) {
-      stroke-opacity: 0.12;
-      animation-duration: 26s;
-    }
-
-    #hello-world-svg .hud-dot {
-      fill: #00f0ff;
-      opacity: 0.85;
-      animation: hw-pulseDot 1.8s ease-in-out infinite;
-    }
-
-    #hello-world-svg .hud-dot:nth-child(2) {
-      animation-delay: 0.3s;
-      opacity: 0.6;
-    }
-
-    #hello-world-svg .hud-dot:nth-child(3) {
-      animation-delay: 0.6s;
-      opacity: 0.4;
-    }
-
-    @keyframes hw-floatGrid {
-      0% { transform: translateY(0px) translateX(0px); }
-      100% { transform: translateY(-10px) translateX(-8px); }
-    }
-
-    @keyframes hw-scan {
-      0% { transform: translateY(-100%); }
-      100% { transform: translateY(100%); }
-    }
-
-    @keyframes hw-draw {
-      to { stroke-dashoffset: 0; }
-    }
-
-    @keyframes hw-glowPulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.65; }
-    }
-
-    @keyframes hw-fadeInFill {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    @keyframes hw-fadeInUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes hw-blink {
-      0%, 50% { opacity: 1; }
-      50.01%, 100% { opacity: 0; }
-    }
-
-    @keyframes hw-rotateOrbit {
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes hw-pulseDot {
-      0%, 100% { r: 2.2; }
-      50% { r: 3.6; }
-    }
-  </style>
-
-  <!-- Background -->
-  <rect x="0" y="0" width="600" height="300" fill="url(#bgGrad)" />
-
-  <!-- Moving grid overlay -->
-  <g id="grid">
-    <rect x="0" y="0" width="600" height="300" fill="url(#gridPattern)" />
-  </g>
-
-  <!-- Scanline -->
-  <rect id="scanline" x="0" y="0" width="600" height="40" fill="url(#neonGrad)" />
-
-  <!-- High-tech orbits around center -->
-  <g id="orbits">
-    <circle cx="300" cy="150" r="70" />
-    <circle cx="300" cy="150" r="100" />
-    <circle cx="300" cy="150" r="130" />
-  </g>
-
-  <!-- HUD dots in top-left -->
-  <g transform="translate(30 30)">
-    <circle class="hud-dot" cx="0" cy="0" r="2.2" />
-    <circle class="hud-dot" cx="10" cy="0" r="2.2" />
-    <circle class="hud-dot" cx="20" cy="0" r="2.2" />
-    <text class="hud-label" x="0" y="18">SYS: HELLO WORLD</text>
-  </g>
-
-  <!-- Main "HELLO WORLD" text -->
-  <g transform="translate(0 0)">
-    <!-- Neon outline path -->
-    <text
-      id="hello-outline"
-      x="50%"
-      y="50%"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="54"
-    >
-      HELLO WORLD
-    </text>
-
-    <!-- Filled text + blinking cursor -->
-    <text
-      id="hello-fill"
-      x="50%"
-      y="50%"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      font-size="54"
-    >
-      HELLO WORLD Autogenerated Config<tspan id="cursor">_</tspan>
-    </text>
-  </g>
-
-  <!-- Subtitle -->
-  <text
-    id="subtitle"
-    x="50%"
-    y="195"
-    text-anchor="middle"
-  >
-    HIGH-TECH • SVG • ANIMATION
-  </text>
-
-  <!-- Bottom-right small HUD -->
-  <g transform="translate(430 250)">
-    <rect x="0" y="-18" width="150" height="24" rx="3" ry="3"
-          fill="rgba(0, 10, 25, 0.8)"
-          stroke="rgba(0,255,255,0.4)"
-          stroke-width="1" />
-    <text class="hud-label" x="8" y="-3">
-      STATUS: ONLINE
-    </text>
-  </g>
-</svg>
-
-          <h1>Cloud Native Hello World</h1>
-          <h2>Kubernetes-Ready Application with Helm & ArgoCD</h2>
-          <p class="status-badge">✓ Running on Kubernetes</p>
-      </div>
-
-      <!-- Additional Info Section -->
-      <div style="margin-top: 60px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
-        <div class="info-card" style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 8px; padding: 20px;">
-          <h4 style="color: #00d4ff; margin-bottom: 10px;">⚡ Technology</h4>
-          <p>Built with Node.js, containerized with Docker, and orchestrated with Kubernetes using Helm Charts.</p>
-        </div>
-        <div class="info-card" style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 8px; padding: 20px;">
-          <h4 style="color: #00d4ff; margin-bottom: 10px;">🚀 Deployment</h4>
-          <p>Managed through ArgoCD for continuous deployment and GitOps-driven infrastructure.</p>
-        </div>
-        <div class="info-card" style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 8px; padding: 20px;">
-          <h4 style="color: #00d4ff; margin-bottom: 10px;">🔍 Health Checks</h4>
-          <p>Includes liveness and readiness probes for robust cluster orchestration.</p>
-        </div>
-      </div>
-    </div>
-  </body>
+    // Add CSS animation for particles
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes particleFloat {
+        0%, 100% { 
+          transform: translate3d(0, 0, 0);
+          opacity: 0.6;
+        }
+        50% {
+          transform: translate3d(var(--tx), var(--ty), var(--tz));
+          opacity: 1;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
 </html>
