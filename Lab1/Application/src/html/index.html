@@ -1,32 +1,94 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>Helm Chart Application</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Helm Chart Application - Cloud Native Platform</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <link rel="stylesheet"   href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body {
+        background: linear-gradient(135deg, #0a0e27 0%, #16213e 50%, #0f3460 100%);
+        min-height: 100vh;
+        color: #e0e0e0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .navbar {
+        background: rgba(10, 14, 39, 0.95) !important;
+        border-bottom: 2px solid #00d4ff;
+        box-shadow: 0 2px 20px rgba(0, 212, 255, 0.1);
+      }
+      .navbar-brand {
+        font-weight: 700;
+        font-size: 18px;
+        color: #00d4ff !important;
+        text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+      }
+      .nav a { color: #b0e0e6 !important; transition: all 0.3s ease; }
+      .nav a:hover { color: #00d4ff !important; text-shadow: 0 0 8px rgba(0, 212, 255, 0.6); }
+      .container-main {
+        padding: 40px 20px;
+        max-width: 1200px;
+      }
+      .jumbotron {
+        background: rgba(22, 33, 62, 0.7);
+        border: 1px solid rgba(0, 212, 255, 0.2);
+        border-radius: 10px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 212, 255, 0.1);
+        padding: 50px 40px !important;
+      }
+      .jumbotron h1 {
+        color: #00d4ff;
+        font-weight: 700;
+        text-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        margin-top: 20px;
+      }
+      .jumbotron h2 {
+        color: #b0e0e6;
+        font-weight: 300;
+        font-size: 18px;
+        margin-top: 15px;
+      }
+      .status-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 20px;
+        background: rgba(0, 212, 255, 0.1);
+        border: 1px solid #00d4ff;
+        color: #00d4ff;
+        font-size: 13px;
+        margin-top: 20px;
+        animation: pulse 2s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
+      }
+    </style>
   </head>
   <body>
-  </div>
-    <div style="margin:100px;">
-     
-  <class="navbar navbar-inverse navbar-static-top">
+    <nav class="navbar navbar-inverse navbar-static-top">
     <div class="container">
-      <a class="navbar-brand" href="/">Helm Chart Application</a>
+      <a class="navbar-brand" href="/">☸ Helm & ArgoCD Lab</a>
       <ul class="nav navbar-nav">
         <li class="active">
           <a href="/">Home</a>
         </li>
         <li>
-          <a href="/health/liveliness">Check liveliness</a>
+          <a href="/health/liveliness">Liveness Probe</a>
         </li>
         <li>
-          <a href="/health/readiness">Check readiness</a>
+          <a href="/health/readiness">Readiness Probe</a>
         </li>
       </ul>
     </div>
-  </nav>
-        <div class="jumbotron"  style="padding:40px;">
+    </nav>
+
+    <div class="container-main">
+        <div class="jumbotron">
           <svg
   id="hello-world-svg"
   width="100%"
@@ -303,8 +365,26 @@
   </g>
 </svg>
 
-          <h1>Hello, world! - Animated</h1>
-          <h2>This is a simple hello World Web Page, this message will be modifed.</h2>
+          <h1>Cloud Native Hello World</h1>
+          <h2>Kubernetes-Ready Application with Helm & ArgoCD</h2>
+          <p class="status-badge">✓ Running on Kubernetes</p>
       </div>
-    </body>
-    </html>
+
+      <!-- Additional Info Section -->
+      <div style="margin-top: 60px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+        <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 8px; padding: 20px;">
+          <h4 style="color: #00d4ff; margin-bottom: 10px;">⚡ Technology</h4>
+          <p>Built with Node.js, containerized with Docker, and orchestrated with Kubernetes using Helm Charts.</p>
+        </div>
+        <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 8px; padding: 20px;">
+          <h4 style="color: #00d4ff; margin-bottom: 10px;">🚀 Deployment</h4>
+          <p>Managed through ArgoCD for continuous deployment and GitOps-driven infrastructure.</p>
+        </div>
+        <div style="background: rgba(0, 212, 255, 0.05); border: 1px solid rgba(0, 212, 255, 0.2); border-radius: 8px; padding: 20px;">
+          <h4 style="color: #00d4ff; margin-bottom: 10px;">🔍 Health Checks</h4>
+          <p>Includes liveness and readiness probes for robust cluster orchestration.</p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
