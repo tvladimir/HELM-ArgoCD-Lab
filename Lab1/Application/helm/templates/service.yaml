@@ -1,5 +1,5 @@
 kind: Service
-apiVersion: v1
+apiVersion: {{ .Chart.apiVersion }}
 metadata:
 # set your user name
   name: {{ .Chart.Name }}-service

@@ -1,5 +1,5 @@
 kind: Deployment
-apiVersion: apps/v1
+apiVersion: apps/{{ .Chart.apiVersion }}
 metadata:
 # set your lab user name
   name: {{ .Chart.Name }}

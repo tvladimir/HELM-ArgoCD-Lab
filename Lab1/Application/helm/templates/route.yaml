@@ -1,5 +1,5 @@
 kind: Route
-apiVersion: route.openshift.io/v1
+apiVersion: route.openshift.io/{{ .Chart.apiVersion }}
 metadata:
 # set your user name
   name:  {{ .Chart.Name }}-route
