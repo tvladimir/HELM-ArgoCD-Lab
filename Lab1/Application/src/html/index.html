@@ -28,7 +28,284 @@
   </nav>
         <div class="jumbotron"  style="padding:40px;">
           <img   src="https://developers.redhat.com/sites/default/files/styles/article_feature/public/blog/2018/05/openshift-featured.png?itok=g0Ee8H1H" alt="OpenShift">
-          <h1>Hello, world!</h1>
+          <svg
+  id="hello-world-svg"
+  width="600"
+  height="300"
+  viewBox="0 0 600 300"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-labelledby="helloTitle helloDesc"
+>
+  <title id="helloTitle">Animated High-Tech Hello World</title>
+  <desc id="helloDesc">Neon high-tech animated Hello World SVG with grid and scanline effects.</desc>
+
+  <defs>
+    <!-- Background gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050816" />
+      <stop offset="50%" stop-color="#05081c" />
+      <stop offset="100%" stop-color="#000000" />
+    </linearGradient>
+
+    <!-- Neon stroke gradient with animated colors -->
+    <linearGradient id="neonGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00f0ff">
+        <animate attributeName="stop-color"
+                 values="#00f0ff;#00ff95;#00f0ff"
+                 dur="6s"
+                 repeatCount="indefinite" />
+      </stop>
+      <stop offset="50%" stop-color="#00aaff">
+        <animate attributeName="stop-color"
+                 values="#00aaff;#00f0ff;#7f5dff;#00aaff"
+                 dur="6s"
+                 repeatCount="indefinite" />
+      </stop>
+      <stop offset="100%" stop-color="#7f5dff">
+        <animate attributeName="stop-color"
+                 values="#7f5dff;#00ff95;#7f5dff"
+                 dur="6s"
+                 repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+
+    <!-- Grid pattern -->
+    <pattern id="gridPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40"
+            fill="none"
+            stroke="rgba(0,255,255,0.09)"
+            stroke-width="1" />
+    </pattern>
+
+    <!-- Glow filter for neon text -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feColorMatrix in="blur" type="matrix"
+                     values="0 0 0 0 0
+                             0 1 1 0 0
+                             0 1 1 0 0
+                             0 0 0 1 0" result="cyanGlow" />
+      <feMerge>
+        <feMergeNode in="cyanGlow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    /* Scope everything to this SVG */
+    #hello-world-svg {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #050811;
+    }
+
+    #hello-world-svg .hud-label {
+      fill: #4ad9ff;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+
+    #hello-world-svg #grid {
+      animation: hw-floatGrid 10s linear infinite alternate;
+      opacity: 0.75;
+    }
+
+    #hello-world-svg #scanline {
+      mix-blend-mode: screen;
+      opacity: 0.45;
+      animation: hw-scan 3s linear infinite;
+    }
+
+    #hello-world-svg #hello-outline {
+      fill: none;
+      stroke: url(#neonGrad);
+      stroke-width: 2.2;
+      stroke-dasharray: 900;
+      stroke-dashoffset: 900;
+      filter: url(#glow);
+      animation:
+        hw-draw 3s ease-out forwards,
+        hw-glowPulse 2.2s ease-in-out 3s infinite;
+    }
+
+    #hello-world-svg #hello-fill {
+      fill: #e6f7ff;
+      opacity: 0;
+      animation: hw-fadeInFill 1.6s ease-out 1.8s forwards;
+    }
+
+    #hello-world-svg #subtitle {
+      fill: #7fd3ff;
+      font-size: 12px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: hw-fadeInUp 1s ease-out 2.4s forwards;
+    }
+
+    #hello-world-svg #cursor {
+      fill: #00f0ff;
+      animation: hw-blink 1s steps(1) infinite;
+    }
+
+    #hello-world-svg #orbits circle {
+      fill: none;
+      stroke: rgba(0,255,255,0.25);
+      stroke-width: 1;
+      stroke-dasharray: 4 8;
+      transform-origin: 300px 150px;
+      animation: hw-rotateOrbit 14s linear infinite;
+    }
+
+    #hello-world-svg #orbits circle:nth-child(2) {
+      stroke-opacity: 0.18;
+      animation-duration: 20s;
+    }
+
+    #hello-world-svg #orbits circle:nth-child(3) {
+      stroke-opacity: 0.12;
+      animation-duration: 26s;
+    }
+
+    #hello-world-svg .hud-dot {
+      fill: #00f0ff;
+      opacity: 0.85;
+      animation: hw-pulseDot 1.8s ease-in-out infinite;
+    }
+
+    #hello-world-svg .hud-dot:nth-child(2) {
+      animation-delay: 0.3s;
+      opacity: 0.6;
+    }
+
+    #hello-world-svg .hud-dot:nth-child(3) {
+      animation-delay: 0.6s;
+      opacity: 0.4;
+    }
+
+    @keyframes hw-floatGrid {
+      0% { transform: translateY(0px) translateX(0px); }
+      100% { transform: translateY(-10px) translateX(-8px); }
+    }
+
+    @keyframes hw-scan {
+      0% { transform: translateY(-100%); }
+      100% { transform: translateY(100%); }
+    }
+
+    @keyframes hw-draw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes hw-glowPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.65; }
+    }
+
+    @keyframes hw-fadeInFill {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes hw-fadeInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes hw-blink {
+      0%, 50% { opacity: 1; }
+      50.01%, 100% { opacity: 0; }
+    }
+
+    @keyframes hw-rotateOrbit {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes hw-pulseDot {
+      0%, 100% { r: 2.2; }
+      50% { r: 3.6; }
+    }
+  </style>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="600" height="300" fill="url(#bgGrad)" />
+
+  <!-- Moving grid overlay -->
+  <g id="grid">
+    <rect x="0" y="0" width="600" height="300" fill="url(#gridPattern)" />
+  </g>
+
+  <!-- Scanline -->
+  <rect id="scanline" x="0" y="0" width="600" height="40" fill="url(#neonGrad)" />
+
+  <!-- High-tech orbits around center -->
+  <g id="orbits">
+    <circle cx="300" cy="150" r="70" />
+    <circle cx="300" cy="150" r="100" />
+    <circle cx="300" cy="150" r="130" />
+  </g>
+
+  <!-- HUD dots in top-left -->
+  <g transform="translate(30 30)">
+    <circle class="hud-dot" cx="0" cy="0" r="2.2" />
+    <circle class="hud-dot" cx="10" cy="0" r="2.2" />
+    <circle class="hud-dot" cx="20" cy="0" r="2.2" />
+    <text class="hud-label" x="0" y="18">SYS: HELLO WORLD</text>
+  </g>
+
+  <!-- Main "HELLO WORLD" text -->
+  <g transform="translate(0 0)">
+    <!-- Neon outline path -->
+    <text
+      id="hello-outline"
+      x="50%"
+      y="50%"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="54"
+    >
+      HELLO WORLD
+    </text>
+
+    <!-- Filled text + blinking cursor -->
+    <text
+      id="hello-fill"
+      x="50%"
+      y="50%"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      font-size="54"
+    >
+      HELLO WORLD<tspan id="cursor">_</tspan>
+    </text>
+  </g>
+
+  <!-- Subtitle -->
+  <text
+    id="subtitle"
+    x="50%"
+    y="195"
+    text-anchor="middle"
+  >
+    HIGH-TECH • SVG • ANIMATION
+  </text>
+
+  <!-- Bottom-right small HUD -->
+  <g transform="translate(430 250)">
+    <rect x="0" y="-18" width="150" height="24" rx="3" ry="3"
+          fill="rgba(0, 10, 25, 0.8)"
+          stroke="rgba(0,255,255,0.4)"
+          stroke-width="1" />
+    <text class="hud-label" x="8" y="-3">
+      STATUS: ONLINE
+    </text>
+  </g>
+</svg>
+
+          <h1>Hello, world! - Animated</h1>
           <h2>This is a simple hello World Web Page, this message will be modifed.</h2>
       </div>
     </body>
