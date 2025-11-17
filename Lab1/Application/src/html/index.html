@@ -1,286 +1,329 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Helm Chart Application - Cloud Native Platform</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
-      
-      body {
-        background: linear-gradient(135deg, #0a0014 0%, #1a0033 25%, #0d0021 50%, #1a0033 75%, #0a0014 100%);
-        min-height: 100vh;
-        color: #00ff88;
-        font-family: 'Share Tech Mono', monospace;
-        background-attachment: fixed;
-        position: relative;
-        overflow-x: hidden;
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Helm Chart Application</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+    
+    body {
+      background: linear-gradient(135deg, #0a0014 0%, #1a0033 25%, #0d0021 50%, #1a0033 75%, #0a0014 100%);
+      min-height: 100vh;
+      color: #00ff88;
+      font-family: 'Share Tech Mono', monospace;
+      background-attachment: fixed;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        repeating-linear-gradient(
+          0deg,
+          rgba(0, 255, 136, 0.02) 0px,
+          rgba(0, 255, 136, 0.02) 2px,
+          transparent 2px,
+          transparent 4px
+        );
+      pointer-events: none;
+      z-index: 1;
+      animation: scanlines 8s linear infinite;
+    }
+    
+    @keyframes scanlines {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(10px); }
+    }
+    
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
+      pointer-events: none;
+      z-index: 2;
+    }
+    
+    .navbar {
+      background: rgba(10, 0, 20, 0.98) !important;
+      border-bottom: 3px solid #00ff88;
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(0, 255, 136, 0.1);
+      position: relative;
+      z-index: 100;
+      animation: fadeInDown 0.8s ease-out;
+    }
+    
+    .navbar-brand {
+      font-weight: 900;
+      font-size: 16px;
+      color: #00ff88 !important;
+      text-shadow: 0 0 10px rgba(0, 255, 136, 0.8), 0 0 20px rgba(0, 255, 136, 0.4);
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+    }
+    
+    .nav a { 
+      color: #00cc6f !important; 
+      transition: all 0.3s ease;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+    
+    .nav a:hover { 
+      color: #00ff88 !important; 
+      text-shadow: 0 0 15px rgba(0, 255, 136, 0.8), 0 0 25px rgba(255, 0, 127, 0.3);
+    }
+    
+    .nav li {
+      animation: slideFromLeft 0.6s ease-out backwards;
+    }
+    
+    .nav li:nth-child(1) { animation-delay: 0.1s; }
+    .nav li:nth-child(2) { animation-delay: 0.2s; }
+    .nav li:nth-child(3) { animation-delay: 0.3s; }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
       }
-      
-      body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: 
-          repeating-linear-gradient(
-            0deg,
-            rgba(0, 255, 136, 0.02) 0px,
-            rgba(0, 255, 136, 0.02) 2px,
-            transparent 2px,
-            transparent 4px
-          );
-        pointer-events: none;
-        z-index: 1;
-        animation: scanlines 8s linear infinite;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
-      
-      @keyframes scanlines {
-        0% { transform: translateY(0); }
-        100% { transform: translateY(10px); }
+    }
+    
+    @keyframes slideFromLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-50px);
       }
-      
-      body::after {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.4) 100%);
-        pointer-events: none;
-        z-index: 2;
+      to {
+        opacity: 1;
+        transform: translateX(0);
       }
-      
-      .navbar {
-        background: rgba(10, 0, 20, 0.98) !important;
-        border-bottom: 3px solid #00ff88;
-        box-shadow: 0 0 30px rgba(0, 255, 136, 0.3), inset 0 1px 0 rgba(0, 255, 136, 0.1);
-        position: relative;
-        z-index: 100;
+    }
+    
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
       }
-      .navbar-brand {
-        font-weight: 900;
-        font-size: 20px;
-        color: #00ff88 !important;
-        text-shadow: 0 0 10px rgba(0, 255, 136, 0.8), 0 0 20px rgba(0, 255, 136, 0.4);
-        font-family: 'Orbitron', sans-serif;
-        letter-spacing: 2px;
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
-      .nav a { 
-        color: #00cc6f !important; 
-        transition: all 0.3s ease;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 12px;
-        letter-spacing: 1px;
-      }
-      .nav a:hover { 
-        color: #00ff88 !important; 
-        text-shadow: 0 0 15px rgba(0, 255, 136, 0.8), 0 0 25px rgba(255, 0, 127, 0.3);
-      }
-      .container-main {
-        padding: 40px 20px;
-        max-width: 1200px;
-        position: relative;
-        z-index: 3;
-      }
-      .jumbotron {
-        background: rgba(20, 0, 40, 0.6);
-        border: 2px solid #00ff88;
-        border-radius: 2px;
-        box-shadow: 0 0 30px rgba(0, 255, 136, 0.2), inset 0 0 20px rgba(0, 255, 136, 0.05);
-        padding: 50px 40px !important;
-        position: relative;
-        overflow: hidden;
-      }
-      
-      .jumbotron::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        right: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(0, 255, 136, 0.03) 0%, transparent 70%);
-        animation: glow-shift 15s ease-in-out infinite;
-      }
-      
-      @keyframes glow-shift {
-        0%, 100% { transform: translate(0, 0); }
-        50% { transform: translate(-20px, -20px); }
-      }
-      
-      .jumbotron h1 {
-        color: #00ff88;
-        font-weight: 900;
-        text-shadow: 0 0 30px rgba(0, 255, 136, 0.8), 0 0 60px rgba(0, 255, 136, 0.4), 0 0 10px rgba(255, 0, 200, 0.2);
-        margin-top: 20px;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 3.5rem;
-        letter-spacing: 3px;
-        position: relative;
-        z-index: 1;
-      }
-      .jumbotron h2 {
-        color: #00ff88;
-        font-weight: 400;
-        font-size: 16px;
-        margin-top: 15px;
-        font-family: 'Share Tech Mono', monospace;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        position: relative;
-        z-index: 1;
-      }
-      .status-badge {
-        display: inline-block;
-        padding: 12px 24px;
-        border-radius: 0;
-        background: rgba(0, 255, 136, 0.1);
-        border: 2px solid #00ff88;
-        color: #00ff88;
-        font-size: 13px;
-        margin-top: 20px;
-        animation: pulse 2s ease-in-out infinite;
-        font-family: 'Orbitron', sans-serif;
-        letter-spacing: 1px;
-        box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
-        position: relative;
-        z-index: 1;
-      }
-      @keyframes pulse {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0.7; }
-      }
-      @keyframes fadeInDown {
-        from {
-          opacity: 0;
-          transform: translateY(-30px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      @keyframes slideInUp {
-        from {
-          opacity: 0;
-          transform: translateY(40px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      @keyframes glow-border {
-        0%, 100% {
-          border-color: rgba(0, 255, 136, 0.5);
-          box-shadow: 0 0 10px rgba(0, 255, 136, 0.2);
-        }
-        50% {
-          border-color: #00ff88;
-          box-shadow: 0 0 30px rgba(0, 255, 136, 0.5), inset 0 0 20px rgba(0, 255, 136, 0.1);
-        }
-      }
-      @keyframes slideFromLeft {
-        from {
-          opacity: 0;
-          transform: translateX(-50px);
-        }
-        to {
-          opacity: 1;
-          transform: translateX(0);
-        }
-      }
-      @keyframes glitch {
-        0% { transform: translate(0); }
-        20% { transform: translate(-2px, 2px); }
-        40% { transform: translate(-2px, -2px); }
-        60% { transform: translate(2px, 2px); }
-        80% { transform: translate(2px, -2px); }
-        100% { transform: translate(0); }
-      }
-      .navbar {
-        animation: fadeInDown 0.8s ease-out;
-      }
-      .jumbotron {
-        animation: slideInUp 1s ease-out;
-      }
-      .info-card {
-        animation: slideInUp 0.8s ease-out backwards;
-        transition: all 0.3s ease;
-        background: rgba(0, 255, 136, 0.05) !important;
-        border: 2px solid #00ff88 !important;
-        border-radius: 2px;
-        box-shadow: 0 0 20px rgba(0, 255, 136, 0.1), inset 0 0 10px rgba(0, 255, 136, 0.02);
-      }
-      .info-card h4 {
-        color: #00ff88 !important;
-        font-family: 'Orbitron', sans-serif;
-        letter-spacing: 1px;
-        text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
-      }
-      .info-card p {
-        color: #00cc6f;
-        font-family: 'Share Tech Mono', monospace;
-      }
-      .info-card:nth-child(1) {
-        animation-delay: 0.2s;
-      }
-      .info-card:nth-child(2) {
-        animation-delay: 0.4s;
-      }
-      .info-card:nth-child(3) {
-        animation-delay: 0.6s;
-      }
-      .info-card:hover {
-        transform: translateY(-8px);
-        border-color: #00ff88 !important;
-        box-shadow: 0 0 40px rgba(0, 255, 136, 0.4), inset 0 0 20px rgba(0, 255, 136, 0.08);
-        animation: glow-border 1s ease-in-out infinite;
-      }
-      .nav li {
-        animation: slideFromLeft 0.6s ease-out backwards;
-      }
-      .nav li:nth-child(1) {
-        animation-delay: 0.1s;
-      }
-      .nav li:nth-child(2) {
-        animation-delay: 0.2s;
-      }
-      .nav li:nth-child(3) {
-        animation-delay: 0.3s;
-      }
-    </style>
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    
+    .content-wrapper {
+      margin: 100px auto;
+      position: relative;
+      z-index: 3;
+      animation: slideInUp 1s ease-out;
+    }
+    
+    .jumbotron {
+      background: rgba(20, 0, 40, 0.6);
+      border: 2px solid #00ff88;
+      border-radius: 2px;
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.2), inset 0 0 20px rgba(0, 255, 136, 0.05);
+      padding: 40px !important;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .jumbotron::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0, 255, 136, 0.03) 0%, transparent 70%);
+      animation: glow-shift 15s ease-in-out infinite;
+    }
+    
+    @keyframes glow-shift {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-20px, -20px); }
+    }
+    
+    .jumbotron h1 {
+      color: #00ff88;
+      font-weight: 900;
+      text-shadow: 0 0 30px rgba(0, 255, 136, 0.8), 0 0 60px rgba(0, 255, 136, 0.4);
+      margin-top: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 3rem;
+      letter-spacing: 3px;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .jumbotron h2 {
+      color: #00ff88;
+      font-weight: 400;
+      font-size: 14px;
+      margin-top: 15px;
+      font-family: 'Share Tech Mono', monospace;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo-container {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin: 30px 0;
+      flex-wrap: wrap;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo-item {
+      width: 100px;
+      height: 100px;
+      padding: 10px;
+      border: 2px solid #00ff88;
+      border-radius: 2px;
+      background: rgba(0, 255, 136, 0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+      animation: float 3s ease-in-out infinite;
+      transition: all 0.3s ease;
+    }
+    
+    .logo-item:nth-child(1) { animation-delay: 0s; }
+    .logo-item:nth-child(2) { animation-delay: 0.5s; }
+    .logo-item:nth-child(3) { animation-delay: 1s; }
+    
+    .logo-item:hover {
+      box-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+      transform: scale(1.1);
+    }
+    
+    .logo-item img {
+      max-width: 80%;
+      max-height: 80%;
+      object-fit: contain;
+    }
+    
+    svg {
+      position: relative;
+      z-index: 1;
+    }
+  </style>
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-static-top">
-    <div class="container">
-      <a class="navbar-brand" href="/">☸ Helm & ArgoCD Lab</a>
-      <ul class="nav navbar-nav">
-        <li class="active">
-          <a href="/">Home</a>
-        </li>
-        <li>
-          <a href="/health/liveliness">Liveness Probe</a>
-        </li>
-        <li>
-          <a href="/health/readiness">Readiness Probe</a>
-        </li>
-      </ul>
-    </div>
+      <div class="container">
+        <a class="navbar-brand" href="/">☸ Helm Chart Application</a>
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <a href="/">Home</a>
+          </li>
+          <li>
+            <a href="/health/liveliness">Check Liveness</a>
+          </li>
+          <li>
+            <a href="/health/readiness">Check Readiness</a>
+          </li>
+        </ul>
+      </div>
     </nav>
 
-    <div class="container-main">
-        <div class="jumbotron">
-          <svg
+    <div class="content-wrapper">
+      <div class="jumbotron" style="padding:40px;">
+        <!-- Animated Tech SVG Background -->
+        <svg width="100%" height="200" viewBox="0 0 600 200" style="position: absolute; top: 0; left: 0; opacity: 0.1; z-index: 0;">
+          <defs>
+            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+              <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(0,255,136,0.2)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="600" height="200" fill="url(#grid)"/>
+          <g opacity="0.3">
+            <circle cx="100" cy="50" r="30" fill="none" stroke="#00ff88" stroke-width="2">
+              <animate attributeName="r" values="30;35;30" dur="3s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="500" cy="150" r="40" fill="none" stroke="#00ff88" stroke-width="2">
+              <animate attributeName="r" values="40;45;40" dur="4s" repeatCount="indefinite"/>
+            </circle>
+            <circle cx="300" cy="100" r="25" fill="none" stroke="#00ff88" stroke-width="2">
+              <animate attributeName="r" values="25;30;25" dur="2.5s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+        </svg>
+
+        <!-- Logo Container -->
+        <div class="logo-container">
+          <div class="logo-item">
+            <img src="https://developers.redhat.com/sites/default/files/styles/article_feature/public/blog/2018/05/openshift-featured.png?itok=g0Ee8H1H" alt="OpenShift">
+          </div>
+          <div class="logo-item">
+            <img src="https://redhat-scholars.github.io/argocd-tutorial/argocd-tutorial/_images/argocd-sync-flow.png" alt="ArgoCD">
+          </div>
+          <div class="logo-item">
+            <img src="https://raw.githubusercontent.com/rhilconsultants/Application-Deployment-Workshop/main/Class%20artifacts/helm-icon-color.png" alt="Helm">
+          </div>
+        </div>
+
+        <!-- Animated Title SVG -->
+        <svg width="100%" height="150" viewBox="0 0 600 150" style="margin: 20px 0;">
+          <defs>
+            <linearGradient id="titleGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#00ff88">
+                <animate attributeName="stop-color" values="#00ff88;#00cc6f;#00ff88" dur="6s" repeatCount="indefinite"/>
+              </stop>
+              <stop offset="100%" stop-color="#00cc6f">
+                <animate attributeName="stop-color" values="#00cc6f;#00ff88;#00cc6f" dur="6s" repeatCount="indefinite"/>
+              </stop>
+            </linearGradient>
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+              <feMerge>
+                <feMergeNode in="coloredBlur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
+          <text x="50%" y="50%" font-size="36" font-weight="bold" text-anchor="middle" fill="url(#titleGrad)" filter="url(#glow)" font-family="Orbitron">
+            HELLO WORLD
+          </text>
+        </svg>
+
+        <h1 style="text-align: center; margin: 20px 0;">Hello, world!</h1>
+        <h2 style="text-align: center;">Our New web site, Deployed with HELM and ArgoCD.</h2>
+      </div>
+    </div>
+  </body>
+</html>
   id="hello-world-svg"
   width="100%"
   viewBox="0 0 600 300"

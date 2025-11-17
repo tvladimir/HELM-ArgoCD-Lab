@@ -136,6 +136,205 @@
       50% { transform: translateY(-20px); }
     }
     
+    /* 3D Cyberpunk Flying Objects */
+    @keyframes float3d {
+      0% { 
+        transform: translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+        opacity: 0.8;
+      }
+      50% {
+        transform: translate3d(100px, -50px, 150px) rotateX(180deg) rotateY(180deg) rotateZ(90deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(200px, 100px, 0) rotateX(360deg) rotateY(360deg) rotateZ(180deg);
+        opacity: 0.8;
+      }
+    }
+
+    @keyframes float3d-reverse {
+      0% { 
+        transform: translate3d(0, 50px, 100px) rotateX(0deg) rotateY(180deg) rotateZ(0deg);
+        opacity: 0.7;
+      }
+      50% {
+        transform: translate3d(-120px, -80px, 200px) rotateX(180deg) rotateY(360deg) rotateZ(90deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate3d(-180px, 80px, 50px) rotateX(360deg) rotateY(180deg) rotateZ(180deg);
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes orbit3d {
+      0% { 
+        transform: translate3d(0, 0, 0) rotateX(0deg);
+      }
+      100% {
+        transform: translate3d(0, 0, 0) rotateX(360deg);
+      }
+    }
+
+    @keyframes rayShine {
+      0% { 
+        opacity: 0;
+        transform: scaleX(0);
+      }
+      50% {
+        opacity: 0.8;
+        transform: scaleX(1);
+      }
+      100% {
+        opacity: 0;
+        transform: scaleX(1);
+      }
+    }
+
+    @keyframes pulseRay {
+      0%, 100% { 
+        stroke-width: 1px;
+        opacity: 0.3;
+      }
+      50% {
+        stroke-width: 3px;
+        opacity: 1;
+      }
+    }
+
+    @keyframes cube3d {
+      0% {
+        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg) translateZ(100px);
+      }
+      100% {
+        transform: rotateX(360deg) rotateY(360deg) rotateZ(360deg) translateZ(100px);
+      }
+    }
+
+    .flying-object {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      perspective: 1000px;
+      z-index: 10;
+    }
+
+    .flying-object:nth-child(1) {
+      animation: float3d 8s infinite ease-in-out;
+      animation-delay: 0s;
+      top: 15%;
+      left: 10%;
+    }
+
+    .flying-object:nth-child(2) {
+      animation: float3d-reverse 10s infinite ease-in-out;
+      animation-delay: 1s;
+      top: 25%;
+      right: 15%;
+    }
+
+    .flying-object:nth-child(3) {
+      animation: float3d 12s infinite ease-in-out;
+      animation-delay: 2s;
+      top: 50%;
+      left: 5%;
+    }
+
+    .flying-object:nth-child(4) {
+      animation: float3d-reverse 9s infinite ease-in-out;
+      animation-delay: 1.5s;
+      bottom: 20%;
+      right: 10%;
+    }
+
+    .cube {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      animation: cube3d 6s infinite linear;
+    }
+
+    .cube-face {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #00ff88;
+      background: rgba(0, 255, 136, 0.1);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+      font-weight: bold;
+      font-size: 24px;
+      color: #00ff88;
+    }
+
+    .cube-face:nth-child(1) { transform: rotateY(0deg) translateZ(30px); }
+    .cube-face:nth-child(2) { transform: rotateY(90deg) translateZ(30px); }
+    .cube-face:nth-child(3) { transform: rotateY(180deg) translateZ(30px); }
+    .cube-face:nth-child(4) { transform: rotateY(270deg) translateZ(30px); }
+    .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(30px); }
+    .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(30px); }
+
+    /* Ray effects container */
+    .ray-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 5;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .ray-line {
+      position: absolute;
+      background: linear-gradient(90deg, transparent, #00ff88, transparent);
+      transform-origin: left center;
+      opacity: 0.6;
+      filter: drop-shadow(0 0 5px rgba(0, 255, 136, 0.8));
+    }
+
+    .ray-line:nth-child(1) {
+      width: 300px;
+      height: 2px;
+      top: 15%;
+      left: 10%;
+      animation: rayShine 3s infinite;
+      animation-delay: 0s;
+    }
+
+    .ray-line:nth-child(2) {
+      width: 250px;
+      height: 2px;
+      top: 35%;
+      right: 15%;
+      animation: rayShine 3.5s infinite;
+      animation-delay: 0.5s;
+      transform: scaleX(-1);
+    }
+
+    .ray-line:nth-child(3) {
+      width: 280px;
+      height: 2px;
+      bottom: 20%;
+      left: 5%;
+      animation: rayShine 3s infinite;
+      animation-delay: 1s;
+    }
+
+    .ray-line:nth-child(4) {
+      width: 220px;
+      height: 2px;
+      bottom: 40%;
+      right: 10%;
+      animation: rayShine 4s infinite;
+      animation-delay: 1.5s;
+      transform: scaleX(-1);
+    }
+    
     .content-wrapper {
       margin: 100px auto;
       position: relative;
@@ -238,6 +437,103 @@
       position: relative;
       z-index: 1;
     }
+
+    /* Cyberpunk Button Styles */
+    .probe-buttons-section {
+      margin-top: 40px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .probe-buttons-section h3 {
+      color: #00ff88;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 18px;
+      letter-spacing: 2px;
+      text-shadow: 0 0 15px rgba(0, 255, 136, 0.6);
+      margin-bottom: 25px;
+      text-transform: uppercase;
+    }
+
+    .buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .probe-btn {
+      display: inline-block;
+      padding: 14px 24px;
+      border: 2px solid #00ff88;
+      background: rgba(0, 255, 136, 0.05);
+      color: #00ff88;
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 13px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .probe-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 255, 136, 0.3), transparent);
+      transition: left 0.5s ease;
+      z-index: -1;
+    }
+
+    .probe-btn:hover {
+      color: #0a0014;
+      background: rgba(0, 255, 136, 0.3);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.6), inset 0 0 20px rgba(0, 255, 136, 0.2);
+      transform: translateY(-3px);
+      text-shadow: none;
+    }
+
+    .probe-btn:hover::before {
+      left: 100%;
+    }
+
+    .probe-btn.danger {
+      border-color: #ff0055;
+      color: #ff0055;
+      box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+    }
+
+    .probe-btn.danger::before {
+      background: linear-gradient(90deg, transparent, rgba(255, 0, 85, 0.3), transparent);
+    }
+
+    .probe-btn.danger:hover {
+      color: #0a0014;
+      background: rgba(255, 0, 85, 0.3);
+      box-shadow: 0 0 30px rgba(255, 0, 85, 0.6), inset 0 0 20px rgba(255, 0, 85, 0.2);
+    }
+
+    .probe-btn.success {
+      border-color: #00ff88;
+      color: #00ff88;
+    }
+
+    .probe-btn.success:hover {
+      background: rgba(0, 255, 136, 0.3);
+    }
+
+    .probe-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.8), inset 0 0 10px rgba(0, 255, 136, 0.4);
+    }
   </style>
   </head>
   <body>
@@ -260,6 +556,59 @@
 
     <div class="content-wrapper">
       <div class="jumbotron" style="padding:40px;">
+        <!-- Ray Container with light effects -->
+        <div class="ray-container">
+          <div class="ray-line"></div>
+          <div class="ray-line"></div>
+          <div class="ray-line"></div>
+          <div class="ray-line"></div>
+        </div>
+
+        <!-- 3D Flying Cubes -->
+        <div class="flying-object">
+          <div class="cube">
+            <div class="cube-face">◆</div>
+            <div class="cube-face">★</div>
+            <div class="cube-face">◆</div>
+            <div class="cube-face">★</div>
+            <div class="cube-face">◇</div>
+            <div class="cube-face">✦</div>
+          </div>
+        </div>
+
+        <div class="flying-object">
+          <div class="cube">
+            <div class="cube-face">★</div>
+            <div class="cube-face">◆</div>
+            <div class="cube-face">★</div>
+            <div class="cube-face">◆</div>
+            <div class="cube-face">✦</div>
+            <div class="cube-face">◇</div>
+          </div>
+        </div>
+
+        <div class="flying-object">
+          <div class="cube">
+            <div class="cube-face">◇</div>
+            <div class="cube-face">★</div>
+            <div class="cube-face">◆</div>
+            <div class="cube-face">✦</div>
+            <div class="cube-face">◇</div>
+            <div class="cube-face">★</div>
+          </div>
+        </div>
+
+        <div class="flying-object">
+          <div class="cube">
+            <div class="cube-face">✦</div>
+            <div class="cube-face">◇</div>
+            <div class="cube-face">★</div>
+            <div class="cube-face">◆</div>
+            <div class="cube-face">★</div>
+            <div class="cube-face">◆</div>
+          </div>
+        </div>
+
         <!-- Animated Tech SVG Background -->
         <svg width="100%" height="200" viewBox="0 0 600 200" style="position: absolute; top: 0; left: 0; opacity: 0.1; z-index: 0;">
           <defs>
@@ -320,11 +669,29 @@
 
         <h1 style="text-align: center; margin: 20px 0;">Hello, world!</h1>
         <h2 style="text-align: center;">Our New web site, Deployed with HELM and ArgoCD.</h2>
+
+        <!-- Probe Testing Buttons Section -->
+        <div class="probe-buttons-section">
+          <h3 style="text-align: center;">Testing Probes</h3>
+          <div class="buttons-grid">
+            <a class="probe-btn success" href="/health/liveliness" role="button">
+              ✓ Check Liveness
+            </a>
+            <a class="probe-btn danger" href="/liveliness/400" role="button">
+              ✕ Set Not Healthy
+            </a>
+            <a class="probe-btn success" href="/health/readiness" role="button">
+              ✓ Check Readiness
+            </a>
+            <a class="probe-btn danger" href="/readiness/400" role="button">
+              ✕ Set Not Ready
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   </body>
 </html>
-  id="hello-world-svg"
   width="100%"
   viewBox="0 0 600 300"
   xmlns="http://www.w3.org/2000/svg"
